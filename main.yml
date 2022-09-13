@@ -1,0 +1,9 @@
+---
+
+- name: Main Playbook
+  vars_files:
+    - ./vars/external_vars.yml
+  hosts: all
+  roles:
+    - ubuntu
+    - bitcoin_core

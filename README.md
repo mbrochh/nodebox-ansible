@@ -6,6 +6,10 @@ into an Ansible Script: https://www.youtube.com/playlist?list=PLCRbH-IWlcW2A_kpx
 I'm not affiliated with them in any way and I have no idea what I am getting
 myself into. Let's see how far I can get.
 
+# Progress
+
+Installed Bitcoin Core and started the daemon: https://youtu.be/fx_mLXISrfM?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=611
+
 # Prerequisites
 
 * Get some hardware and install Ubuntu Server on it

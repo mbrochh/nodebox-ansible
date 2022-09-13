@@ -1,0 +1,6 @@
+ansible_user: your nodebox user here (satoshi?)
+ansible_become_password: your nodebox password here
+
+bitcoin_core_folder_name: 'bitcoin-23.0'
+bitcoin_core_download_url: 'https://bitcoincore.org/bin/bitcoin-core-23.0/bitcoin-23.0-x86_64-linux-gnu.tar.gz'
+bitcoin_core_checksums_url: 'https://bitcoincore.org/bin/bitcoin-core-23.0/SHA256SUMS'
