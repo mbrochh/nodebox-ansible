@@ -25,3 +25,41 @@
 - name: Start Bitcoin Core Daemon
   become_user: satoshi
   shell: bitcoind -daemon
+
+# see https://youtu.be/fx_mLXISrfM?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=675
+- name: Download rpcauth.py
+  become_user: satoshi
+  ansible.builtin.get_url:
+    url: '{{ rpcauth_source_url }}'
+    dest: '~/downloads/rpcauth.py'
+    mode: a+x
+    timeout: 30
+
+# see https://youtu.be/fx_mLXISrfM?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=586
+- name: Create bitcoin.conf file
+  become_user: satoshi
+  ansible.builtin.template:
+    src: bitcoin.conf
+    dest: '~/.bitcoin/bitcoin.conf'
+
+# see https://youtu.be/fx_mLXISrfM?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=675
+- name: Execute rpcauth.py
+  become_user: satoshi
+  shell: './rpcauth.py {{ bitcoin_core_username }} {{ bitcoin_core_password }}'
+  args:
+    chdir: '~/downloads'
+  register: rpcauth_result
+
+- set_fact:
+    rpcauth_value: "{{ rpcauth_result.stdout_lines[1] }}"
+
+- name: Insert rpcauth into bitcoin.conf
+  become_user: satoshi
+  ansible.builtin.lineinfile:
+    path: '~/.bitcoin/bitcoin.conf'
+    regexp: '^rpcauth=bitcoin:'
+    line: '{{ rpcauth_value }}'
+    insertafter: '^whitelist'
+
+# see https://youtu.be/fx_mLXISrfM?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=970
+# TODO: continue here
