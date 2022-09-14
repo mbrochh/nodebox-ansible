@@ -8,13 +8,20 @@ myself into. Let's see how far I can get.
 
 # Progress
 
-Installed Bitcoin Core and started the daemon: https://youtu.be/fx_mLXISrfM?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=611
+Currently at this point in the videos: https://youtu.be/fx_mLXISrfM?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=970
+
+* installed Bitcoin Core 
+* started the daemon
+* created bitcoin.conf
+* downloaded & executed rpcauth.py
 
 # Prerequisites
 
 * Get some hardware and install Ubuntu Server on it
-* Make sure to install Python on your machine.
-* Install Ansible on your machine: https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html
+  * I'll explain my setup when the script is done
+* Make sure to install Python & Ansible on your machine.
+  * I'll explain the fastest way to do that when the script is done
+  * for Ansible, see https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html
 
 # CLI Commands
 
@@ -22,4 +29,3 @@ Installed Bitcoin Core and started the daemon: https://youtu.be/fx_mLXISrfM?list
   * see https://youtu.be/fx_mLXISrfM?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=451
 * `bitcoin-cli getconnectioncount`
   * see https://youtu.be/fx_mLXISrfM?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=512
-  
