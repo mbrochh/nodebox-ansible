@@ -1,3 +1,4 @@
+# see https://youtu.be/YpRuP_X1D2s?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=819
 - name: Install tools
   become: true
   ansible.builtin.apt:
@@ -5,6 +6,7 @@
     update_cache: yes
     cache_valid_time: 3600
 
+# see https://youtu.be/fx_mLXISrfM?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=6
 - name: Create folders
   become_user: satoshi
   ansible.builtin.file:

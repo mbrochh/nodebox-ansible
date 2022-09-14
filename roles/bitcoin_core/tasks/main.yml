@@ -1,3 +1,5 @@
+
+# see https://youtu.be/fx_mLXISrfM?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=41
 - name: Download Bitcoin Core
   become_user: satoshi
   ansible.builtin.get_url:
@@ -6,6 +8,7 @@
     checksum: 'sha256:{{ bitcoin_core_checksums_url }}'
     timeout: 30
 
+# see https://youtu.be/fx_mLXISrfM?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=279
 - name: Unarchive Bitcoin Core
   become_user: satoshi
   ansible.builtin.unarchive:
@@ -13,10 +16,12 @@
     src: ~/downloads/{{ bitcoin_core_folder_name }}.tar.gz
     dest: ~/downloads/
 
+# see https://youtu.be/fx_mLXISrfM?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=300
 - name: Install Bitcoin Core
   become: true
   shell: 'install -m 0755 -o root -g root -t /usr/local/bin /home/satoshi/downloads/{{ bitcoin_core_folder_name }}/bin/*'
 
+# see https://youtu.be/fx_mLXISrfM?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=334
 - name: Start Bitcoin Core Daemon
   become_user: satoshi
   shell: bitcoind -daemon
