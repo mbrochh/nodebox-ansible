@@ -22,8 +22,13 @@ Currently at this point in the videos: https://youtu.be/fx_mLXISrfM?list=PLCRbH-
 * Make sure to install Python & Ansible on your machine.
   * I'll explain the fastest way to do that when the script is done
   * for Ansible, see https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html
+* Create `hosts` file based on `hosts.sample`
+* Create `./vars/external_vars.yml` file based on `./vars/external_vars.yml.sample`
 
 # CLI Commands
+
+Just taking some notes here about useful CLI commands that k3tan shares in 
+his videos:
 
 * `bitcoin-cli getblockchaininfo`
   * see https://youtu.be/fx_mLXISrfM?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=451
