@@ -31,6 +31,14 @@ Just taking some notes here about useful CLI commands that k3tan shares in
 his videos:
 
 * `bitcoin-cli getblockchaininfo`
+  * Shows all kinds of info about the downloaded blockchain
   * see https://youtu.be/fx_mLXISrfM?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=451
 * `bitcoin-cli getconnectioncount`
+  * Shows number of conntected peers
   * see https://youtu.be/fx_mLXISrfM?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=512
+* `bitcoin-cli stop`
+  * Stops the daemon (don't use this, use the systemctl command instead)
+  * see https://youtu.be/fx_mLXISrfM?t=1161
+* `sudo systemctl status bitcoind`
+  * commands to control bitcoind: start, stop, restart, status
+  * see https://youtu.be/fx_mLXISrfM?t=1192
