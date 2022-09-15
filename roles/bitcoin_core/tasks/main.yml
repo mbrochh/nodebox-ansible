@@ -21,11 +21,6 @@
   become: true
   shell: 'install -m 0755 -o root -g root -t /usr/local/bin /home/{{ ansible_user }}/downloads/{{ bitcoin_core_folder_name }}/bin/*'
 
-# see https://youtu.be/fx_mLXISrfM?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=334
-- name: Start Bitcoin Core Daemon
-  become_user: satoshi
-  shell: bitcoind -daemon
-
 # see https://youtu.be/fx_mLXISrfM?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=675
 - name: Download rpcauth.py
   become_user: satoshi
@@ -146,7 +141,7 @@
     replace: '# ProtectHome'
 
 # see https://youtu.be/fx_mLXISrfM?t=1172
-- name: Enable systemd service
+- name: Enable bitcoind service
   become: true
   ansible.builtin.systemd:
     state: started
