@@ -6,4 +6,5 @@
   hosts: all
   roles:
     - ubuntu
+    - tor
     - bitcoin_core

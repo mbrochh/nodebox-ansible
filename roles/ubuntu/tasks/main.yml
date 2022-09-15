@@ -1,5 +1,5 @@
 # see https://youtu.be/YpRuP_X1D2s?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=819
-- name: Install tools
+- name: Run apt upgrade
   become: true
   ansible.builtin.apt:
     upgrade: yes

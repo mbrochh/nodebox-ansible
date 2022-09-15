@@ -1,0 +1,40 @@
+- name: Install tor
+  become: true
+  ansible.builtin.apt:
+    pkg:
+      - tor  # see https://youtu.be/fx_mLXISrfM?t=1264
+
+# see https://youtu.be/fx_mLXISrfM?t=1287
+- name: Add tor configuration
+  become: true
+  ansible.builtin.blockinfile:
+    path: /etc/tor/torrc
+    block: |
+      ControlPort 9051
+      CookieAuthentication 1
+      CookieAuthFileGroupReadable 1
+
+# see https://youtu.be/fx_mLXISrfM?t=1339
+- name: Restart tor
+  become: true
+  ansible.builtin.systemd:
+    state: restarted
+    daemon_reload: yes
+    name: tor
+
+# see https://youtu.be/fx_mLXISrfM?t=1350
+- name: Add user to tor group
+  become: true
+  ansible.builtin.shell: 'usermod -aG debian-tor {{ ansible_user }}'
+  
+# see https://youtu.be/fx_mLXISrfM?t=1475
+- name: Download bitnodes.io tor network page
+  become_user: satoshi
+  ansible.builtin.shell: 'cd ~/downloads && wget "{{ bitnodes_tor_network_url }}" -O bitnodes-tor.html'
+
+# see https://youtu.be/fx_mLXISrfM?t=1475
+- name: Fetch one tor peer node
+  become_user: satoshi
+  ansible.builtin.shell: "grep -oE -m 1 'nodes([^\"]*onion-8333)' bitnodes-tor.html | head -1 | sed -e 's/nodes\\///g' > tor-peer.txt"
+  args:
+    chdir: '~/downloads'
