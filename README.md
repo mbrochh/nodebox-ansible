@@ -8,12 +8,15 @@ myself into. Let's see how far I can get.
 
 # Progress
 
-Currently at this point in the videos: https://youtu.be/fx_mLXISrfM?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=970
+Currently at this point in the videos: https://youtu.be/fx_mLXISrfM?t=1265 
 
 * installed Bitcoin Core 
 * started the daemon
 * created bitcoin.conf
 * downloaded & executed rpcauth.py
+* updated bitcoin.conf
+* registered bitcoind as service that starts on boot
+
 
 # Prerequisites
 
