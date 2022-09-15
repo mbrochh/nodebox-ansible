@@ -8,7 +8,7 @@ myself into. Let's see how far I can get.
 
 # Progress
 
-Currently at this point in the videos: https://youtu.be/fx_mLXISrfM?t=1265 
+Currently at this point in the videos: https://youtu.be/fx_mLXISrfM?t=1751
 
 * installed & configured tor
 * installed Bitcoin Core 
