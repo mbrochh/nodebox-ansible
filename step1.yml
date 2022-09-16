@@ -1,0 +1,9 @@
+---
+
+- name: Step 1 - Prepare Ubuntu & install Bitcoin Core
+  vars_files:
+    - ./vars/external_vars.yml
+  hosts: all
+  roles:
+    - ubuntu
+    - bitcoin_core

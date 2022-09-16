@@ -1,10 +1,8 @@
 ---
 
-- name: Main Playbook
+- name: Step 2 - Install Tor
   vars_files:
     - ./vars/external_vars.yml
   hosts: all
   roles:
-    - ubuntu
     - tor
-    - bitcoin_core

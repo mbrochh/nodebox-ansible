@@ -25,10 +25,22 @@ Currently at this point in the videos: https://youtu.be/fx_mLXISrfM?t=1751
 * Make sure to install Python & Ansible on your machine.
   * I'll explain the fastest way to do that when the script is done
   * for Ansible, see https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html
+
+# Usage
+
 * Clone this repo
 * Create `hosts` file based on `hosts.sample`
 * Create `./vars/external_vars.yml` file based on `./vars/external_vars.yml.sample`
-* Execute with `ansible-playbook -i hosts main.yml`
+* Execute with `ansible-playbook -i hosts step1.yml`
+  * This will only prepare Ubuntu and install bitcoin core.
+  * You should check if it worked via `tail -f ~/.bitcoin/debug.log`
+  * Let it run over night until the blockchain is fully downloaded
+  * You can run `bitcoin-cli getblockchaininfo` and compare the `blocks` value
+    with the latest value shown at https://mempool.space/ to know if your
+    blockchain has been fully synced. Also, `initialblockdownload` should
+    be `false` at this point
+* Then execute `ansible-playbook -i hosts step2.yml`
+  * This will install Tor and restart the bitcoind service
 
 # Cleanup
 

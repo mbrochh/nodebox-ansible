@@ -57,18 +57,6 @@
     insertafter: '^whitelist'
 
 
-# see https://youtu.be/fx_mLXISrfM?t=1470
-- name: Read tor peer node
-  ansible.builtin.slurp:
-    src: '~/downloads/tor-peer.txt'
-  register: tor_peer
-
-- name: Insert tor peer into bitoin.conf
-  ansible.builtin.lineinfile:
-    path: '~/.bitcoin/bitcoin.conf'
-    regexp: '^addnode='
-    line: "addnode={{ tor_peer['content'] | b64decode }}"
-
 # see https://youtu.be/fx_mLXISrfM?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=970
 - name: Download bitcoind.service file
   become: true
@@ -144,7 +132,7 @@
 - name: Enable bitcoind service
   become: true
   ansible.builtin.systemd:
-    state: started
+    state: restarted
     enabled: yes
     daemon_reload: yes
     name: bitcoind
