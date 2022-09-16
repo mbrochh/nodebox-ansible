@@ -1,11 +1,21 @@
+# ==============================================================================
+# You must change these:
+# ==============================================================================
 ansible_user: your nodebox user here (satoshi?)
 ansible_become_password: your nodebox password here
-
 bitcoin_core_username: your bitcoin core username 
 bitcoin_core_password: your bitcoin core password
 
+# ==============================================================================
+# Change these to the latest bitcoin version if needed
+# ==============================================================================
 bitcoin_core_folder_name: 'bitcoin-23.0'
 bitcoin_core_download_url: 'https://bitcoincore.org/bin/bitcoin-core-23.0/bitcoin-23.0-x86_64-linux-gnu.tar.gz'
 bitcoin_core_checksums_url: 'https://bitcoincore.org/bin/bitcoin-core-23.0/SHA256SUMS'
 
+# ==============================================================================
+# You probably don't need to change these
+# ==============================================================================
 rpcauth_source_url: 'https://raw.githubusercontent.com/bitcoin/bitcoin/master/share/rpcauth/rpcauth.py'
+bitcoind_service_source_url: 'https://raw.githubusercontent.com/bitcoin/bitcoin/master/contrib/init/bitcoind.service'
+bitnodes_tor_network_url: 'https://bitnodes.io/nodes/?q=Tor%20network%20(TOR)'
