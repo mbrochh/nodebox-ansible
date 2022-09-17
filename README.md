@@ -8,11 +8,16 @@ myself into. Let's see how far I can get.
 
 # Progress
 
+Please note: I'm still chugging along all those videos. I have not attempted
+a complete run against a 100% newly installed Ubuntu Server 22.04, yet. I will
+do that at the very end, but I *think* that it should all work.
+
 Currently at this point in the videos: https://youtu.be/9dcXXz1CHV8?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=6
 
 * installed Bitcoin Core
 * installed Tor
 * installed Fulcrum
+* installed mempool.space
 
 # Prerequisites
 
@@ -27,6 +32,7 @@ Currently at this point in the videos: https://youtu.be/9dcXXz1CHV8?list=PLCRbH-
 * Clone this repo
 * Create `hosts` file based on `hosts.sample`
 * Create `./vars/external_vars.yml` file based on `./vars/external_vars.yml.sample`
+* NOTE: The `ansible-playbook` commands can be re-run as often as you want
 * Execute with `ansible-playbook -i hosts step1.yml`
   * This will only prepare Ubuntu and install bitcoin core.
   * You should check if it worked via `tail -f ~/.bitcoin/debug.log`
@@ -57,6 +63,9 @@ shown in the videos:
 * I had to download and install `libssl1.1.1` 
   (see discussion here https://github.com/cculianu/Fulcrum/issues/126);
   I can likely remove this when a new Fulcrum version is released
+* The docker installation is slightly different because the installation
+  instructions in the docker docs have since changed.
+  * we can now use `docker compose` instead of `docker-compose`
 # CLI Commands
 
 Just taking some notes here about useful CLI commands that k3tan shares in 
