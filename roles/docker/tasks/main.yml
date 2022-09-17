@@ -1,0 +1,44 @@
+# see https://youtu.be/I2SzBqcsXaE?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=80
+- name: Install docker prerequisites
+  become: true
+  ansible.builtin.apt:
+    pkg:
+      - ca-certificates
+      - curl
+      - gnupg
+      - lsb-release
+
+# see https://youtu.be/I2SzBqcsXaE?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=108
+- name: Create keyrings folder
+  become: true
+  ansible.builtin.file:
+    path: '/etc/apt/keyrings'
+    state: directory
+
+- name: Delete key from potential previous run
+  become: true
+  ansible.builtin.shell: 'rm /etc/apt/keyrings/docker.gpg'
+ 
+- name: Download docker GPG key
+  become: true
+  ansible.builtin.shell: 'curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg'
+   
+- name: Setup docker repository
+  become: true
+  ansible.builtin.shell: 'echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null'
+
+## see https://youtu.be/I2SzBqcsXaE?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=135
+- name: Install docker
+  become: true
+  ansible.builtin.apt:
+    update_cache: yes
+    pkg:
+      - docker-ce 
+      - docker-ce-cli 
+      - containerd.io 
+      - docker-compose-plugin
+
+# see https://youtu.be/I2SzBqcsXaE?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=165
+- name: Add user to docker group
+  become: true
+  ansible.builtin.shell: 'usermod -aG docker {{ ansible_user }}'
