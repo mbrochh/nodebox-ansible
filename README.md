@@ -8,15 +8,11 @@ myself into. Let's see how far I can get.
 
 # Progress
 
-Currently at this point in the videos: https://youtu.be/fx_mLXISrfM?t=1751
+Currently at this point in the videos: https://youtu.be/9dcXXz1CHV8?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=6
 
-* installed & configured tor
-* installed Bitcoin Core 
-* started the daemon
-* created bitcoin.conf
-* downloaded & executed rpcauth.py
-* updated bitcoin.conf
-* registered bitcoind as service that starts on boot
+* installed Bitcoin Core
+* installed Tor
+* installed Fulcrum
 
 # Prerequisites
 
@@ -52,6 +48,15 @@ After the script has run, you need to do the following:
 * check `bitcoin-cli getnetworkinfo` and see if `onion` has `"reachable": true`
 
 I will probably script the things above as well at the very end.
+
+# Caveats
+
+These are things that I had to do differently because they didn't work as
+shown in the videos:
+
+* I had to download and install `libssl1.1.1` 
+  (see discussion here https://github.com/cculianu/Fulcrum/issues/126);
+  I can likely remove this when a new Fulcrum version is released
 # CLI Commands
 
 Just taking some notes here about useful CLI commands that k3tan shares in 

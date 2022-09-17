@@ -9,9 +9,15 @@ bitcoin_core_password: your bitcoin core password
 # ==============================================================================
 # Change these to the latest bitcoin version if needed
 # ==============================================================================
+# see https://bitcoin.org/en/download
 bitcoin_core_folder_name: 'bitcoin-23.0'
 bitcoin_core_download_url: 'https://bitcoincore.org/bin/bitcoin-core-23.0/bitcoin-23.0-x86_64-linux-gnu.tar.gz'
 bitcoin_core_checksums_url: 'https://bitcoincore.org/bin/bitcoin-core-23.0/SHA256SUMS'
+
+# see https://github.com/cculianu/Fulcrum/releases
+fulcrum_folder_name: 'fulcrum-1.8.0'
+fulcrum_download_url: 'https://github.com/cculianu/Fulcrum/releases/download/v1.8.0/Fulcrum-1.8.0-x86_64-linux.tar.gz'
+fulcrum_checksum_url: 'https://github.com/cculianu/Fulcrum/releases/download/v1.8.0/Fulcrum-1.8.0-x86_64-linux.tar.gz.sha256sum'
 
 # ==============================================================================
 # You probably don't need to change these
