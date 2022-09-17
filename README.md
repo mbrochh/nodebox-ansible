@@ -41,8 +41,9 @@ Currently at this point in the videos: https://youtu.be/fx_mLXISrfM?t=1751
     be `false` at this point
 * Then execute `ansible-playbook -i hosts step2.yml`
   * This will install Tor and restart the bitcoind service
+  * Then it will install Fulcrum
 
-# Cleanup
+# Manual Steps
 
 After the script has run, you need to do the following:
 
@@ -74,3 +75,5 @@ his videos:
 * `sudo systemctl status tor`
   * commands to control tor: start, stop, restart, status
   * see https://youtu.be/fx_mLXISrfM?t=1264
+* `journalctl -fu bitcoind|fulcrum`
+  * see logs of the given service in realtime

@@ -1,0 +1,108 @@
+- name: Stop fulcrum service from potential earlier attempt
+  become: true
+  ansible.builtin.systemd:
+    state: stopped
+    name: fulcrum
+  ignore_errors: true
+
+# TODO: Install libssl1.1.1
+# Not in the videos, fulcrum1.8 didn't work for me, so I had to do this
+- name: Download libssl1.1.1
+  become_user: satoshi
+  ansible.builtin.get_url: 
+    url: 'http://nz2.archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.16_amd64.deb'
+    dest: '~/downloads/libssl1.1_1.1.1f-1ubuntu2.16_amd64.deb'
+    timeout: 30
+
+- name: Install libssl1.1.1
+  become: true
+  ansible.builtin.shell: dpkg -i libssl1.1_1.1.1f-1ubuntu2.16_amd64.deb
+  args:
+    chdir: '/home/{{ ansible_user }}/downloads'
+    
+# see https://youtu.be/SpQRrbJt7cg?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=47
+- name: Create fulcrum_db folder
+  become_user: satoshi
+  ansible.builtin.file: 
+      path: '{{ item.path }}'
+      state: directory
+  loop:
+    - { path: '~/fulcrum' }
+    - { path: '~/fulcrum_db'}
+
+# see https://youtu.be/SpQRrbJt7cg?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=29
+- name: Download fulcrum
+  become_user: satoshi
+  ansible.builtin.get_url:
+    url: '{{ fulcrum_download_url }}'
+    dest: '~/downloads/{{ fulcrum_folder_name }}.tar.gz'
+    checksum: 'sha256:{{ fulcrum_checksum_url }}'
+    timeout: 30
+
+# see https://youtu.be/fx_mLXISrfM?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=279
+- name: Unarchive fulcrum
+  become_user: satoshi
+  ansible.builtin.unarchive:
+    remote_src: yes
+    src: ~/downloads/{{ fulcrum_folder_name }}.tar.gz
+    dest: ~/downloads/
+
+# see https://youtu.be/SpQRrbJt7cg?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=93
+- name: Delete fulcrum files from potential earlier attempt
+  become_user: satoshi
+  ansible.builtin.shell: rm -rf ~//fulcrum/*
+
+- name: Move fulcrum files
+  become_user: satoshi
+  ansible.builtin.shell: mv ~/downloads/Fulcrum-*/* ~/fulcrum
+
+- name: Delete empty fulcrum archive folder
+  become_user: satoshi
+  ansible.builtin.shell: rmdir ~/downloads/Fulcrum-*
+
+# see https://youtu.be/SpQRrbJt7cg?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=142
+- name: Create SSL keys
+  become_user: satoshi
+  ansible.builtin.shell: 'openssl req -newkey rsa:2048 -new -nodes -x509 -days 3650 -keyout key.pem -out cert.pem -subj "/C=/ST=/L=/O= Security/OU= Department/CN="'
+  args:
+    chdir: '~/fulcrum'
+
+# see https://youtu.be/SpQRrbJt7cg?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=162
+- name: Rename fulcrum.conf
+  become_user: satoshi
+  ansible.builtin.shell: 'mv fulcrum-example-config.conf fulcrum.conf'
+  args:
+    chdir: '~/fulcrum'
+
+# see https://youtu.be/SpQRrbJt7cg?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=195
+- name: Update fulcrum.conf
+  become_user: satoshi
+  ansible.builtin.lineinfile:
+    path: '~/fulcrum/fulcrum.conf'
+    regexp: '{{ item.regexp }}'
+    line: '{{ item.line }}'
+  loop:
+    - { regexp: '^datadir = /path/to/a/dir', line: 'datadir = /home/{{ ansible_user }}/fulcrum_db' }
+    - { regexp: '^rpcuser = ', line:  'rpcuser = {{ bitcoin_core_username }}' }
+    - { regexp: '^rpcpassword = ', line:  'rpcpassword = {{ bitcoin_core_password }}' }
+    - { regexp: 'ssl =', line:  'ssl = 0.0.0.0:5002' }
+    - { regexp: 'cert =', line:  'cert = /home/{{ ansible_user }}/fulcrum/cert.pem' }
+    - { regexp: 'key =', line:  'key = /home/{{ ansible_user }}/fulcrum/key.pem' }
+    - { regexp: 'peering =', line:  'peering = false' }
+    - { regexp: 'fast-sync =', line:  'fast-sync = 5000' }
+
+# see https://youtu.be/SpQRrbJt7cg?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=358
+- name: Create fulcrum.service
+  become: true
+  ansible.builtin.template:
+    src: fulcrum.service 
+    dest: '/etc/systemd/system/fulcrum.service'
+
+# see https://youtu.be/SpQRrbJt7cg?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=408
+- name: Enable fulcrum service
+  become: true
+  ansible.builtin.systemd:
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
+    name: fulcrum

@@ -1,4 +1,12 @@
 
+- name: Stop bitcoind service from potential earlier attempt
+  become: true
+  ansible.builtin.systemd:
+    state: stopped
+    name: bitcoind
+  ignore_errors: true
+
+
 # see https://youtu.be/fx_mLXISrfM?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=41
 - name: Download Bitcoin Core
   become_user: satoshi
