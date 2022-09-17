@@ -1,6 +1,7 @@
 # ==============================================================================
 # You must change these:
 # ==============================================================================
+nodebox_ip: 192.168.1.XX
 ansible_user: your nodebox user here (satoshi?)
 ansible_become_password: your nodebox password here
 bitcoin_core_username: your bitcoin core username 
