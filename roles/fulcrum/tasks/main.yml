@@ -85,7 +85,7 @@
     - { regexp: '^datadir = /path/to/a/dir', line: 'datadir = /home/{{ ansible_user }}/fulcrum_db' }
     - { regexp: '^rpcuser = ', line:  'rpcuser = {{ bitcoin_core_username }}' }
     - { regexp: '^rpcpassword = ', line:  'rpcpassword = {{ bitcoin_core_password }}' }
-    - { regexp: 'ssl =', line:  'ssl = 0.0.0.0:5002' }
+    - { regexp: 'ssl =', line:  'ssl = 0.0.0.0:50002' }
     - { regexp: 'cert =', line:  'cert = /home/{{ ansible_user }}/fulcrum/cert.pem' }
     - { regexp: 'key =', line:  'key = /home/{{ ansible_user }}/fulcrum/key.pem' }
     - { regexp: 'peering =', line:  'peering = false' }
