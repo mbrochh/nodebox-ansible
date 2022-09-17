@@ -1,0 +1,61 @@
+# see https://youtu.be/I2SzBqcsXaE?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=288
+- name: Clone mempool repo
+  become_user: satoshi
+  ansible.builtin.git:
+    accept_hostkey: yes
+    repo: 'https://github.com/mempool/mempool.git'
+    dest: '~/mempool'
+    force: yes
+
+# see https://youtu.be/I2SzBqcsXaE?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=329
+- name: Update mempool docker-compose.yml
+  become_user: satoshi
+  ansible.builtin.lineinfile:
+    path: '~/mempool/docker/docker-compose.yml'
+    regexp: '{{ item.regexp }}'
+    line: '{{ item.line }}'
+  loop:
+    - { regexp: '80:8080', line: '      - 4080:8080' }
+    - { regexp: 'CORE_RPC_HOST', line: '      CORE_RPC_HOST: "{{ nodebox_ip }}"' }
+    - { regexp: 'CORE_RPC_USERNAME', line: '      CORE_RPC_USERNAME: "{{ bitcoin_core_username }}"' }
+    - { regexp: 'CORE_RPC_PASSWORD', line: '      CORE_RPC_PASSWORD: "{{ bitcoin_core_password }}"' }
+    - { regexp: 'restart: on-failure', line: '    restart: always' }
+    - { regexp: 'restart: on-failure', line: '    restart: always' }
+    - { regexp: 'restart: on-failure', line: '    restart: always' }
+    - { regexp: 'MEMPOOL_BACKEND:', line: '      MEMPOOL_BACKEND: "electrum"' }
+
+# see https://youtu.be/I2SzBqcsXaE?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=436
+- name: Add ELECTRUM_ settings to mempool docker-compose.yml
+  become_user: satoshi
+  ansible.builtin.blockinfile:
+    path: '~/mempool/docker/docker-compose.yml'
+    marker_begin: 'BEGIN #1'
+    marker_end: 'END #1'
+    insertbefore: 'MEMPOOL_BACKEND'
+    block: |6
+                ELECTRUM_HOST: "{{ nodebox_ip }}"
+                ELECTRUM_PORT: "50002"
+                ELECTRUM_TLS_ENABLED: "true"
+    
+# see https://youtu.be/I2SzBqcsXaE?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=481
+- name: Add subnet to mempool docker-compose.yml
+  become_user: satoshi
+  ansible.builtin.blockinfile:
+    path: '~/mempool/docker/docker-compose.yml'
+    marker_begin: 'BEGIN #2'
+    marker_end: 'END #2'
+    insertafter: 'EOF'
+    block: |
+      networks:
+        default:
+          driver: bridge
+          ipam:
+            config:
+              - subnet: 172.16.57.0/24
+
+# see https://youtu.be/I2SzBqcsXaE?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=877
+- name: Start mempool docker
+  become_user: satoshi
+  ansible.builtin.shell: docker compose up -d
+  args:
+    chdir: '~/mempool/docker'
