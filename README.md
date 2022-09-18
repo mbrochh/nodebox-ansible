@@ -8,16 +8,19 @@ myself into. Let's see how far I can get.
 
 # Progress
 
-Please note: I'm still chugging along all those videos. I have not attempted
-a complete run against a 100% newly installed Ubuntu Server 22.04, yet. I will
-do that at the very end, but I *think* that it should all work.
+Please note: I'm still chugging along all those videos. 
 
-Currently at this point in the videos: https://youtu.be/9dcXXz1CHV8?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=6
+I have attempted a full run up until role `samourai_dojo` with a fresh Ubuntu
+Server 22.04 installation on 2022-09-18 and it worked well.
+
+Currently at this point in the videos: https://youtu.be/cKTThYKsiEo?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=643
 
 * installed Bitcoin Core
+* installed Docker
 * installed Tor
 * installed Fulcrum
 * installed mempool.space
+* installed Samourai Dojo
 
 # Prerequisites
 
@@ -34,16 +37,17 @@ Currently at this point in the videos: https://youtu.be/9dcXXz1CHV8?list=PLCRbH-
 * Create `./vars/external_vars.yml` file based on `./vars/external_vars.yml.sample`
 * NOTE: The `ansible-playbook` commands can be re-run as often as you want
 * Execute with `ansible-playbook -i hosts step1.yml`
-  * This will only prepare Ubuntu and install bitcoin core.
+  * This will only prepare Ubuntu and install docker and Bitcoin Core.
   * You should check if it worked via `tail -f ~/.bitcoin/debug.log`
+  * Also check if `docker ps` shows `CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES`
   * Let it run over night until the blockchain is fully downloaded
   * You can run `bitcoin-cli getblockchaininfo` and compare the `blocks` value
     with the latest value shown at https://mempool.space/ to know if your
     blockchain has been fully synced. Also, `initialblockdownload` should
     be `false` at this point
 * Then execute `ansible-playbook -i hosts step2.yml`
-  * This will install Tor and restart the bitcoind service
-  * Then it will install Fulcrum
+  * This will install Tor, Fulcrum, Mempool, Dojo
+  * Fulcrum will need a long time to create its DB as well
 
 # Manual Steps
 
@@ -62,10 +66,20 @@ shown in the videos:
 
 * I had to download and install `libssl1.1.1` 
   (see discussion here https://github.com/cculianu/Fulcrum/issues/126);
-  I can likely remove this when a new Fulcrum version is released
+  I will remove this when a new Fulcrum version is released
 * The docker installation is slightly different because the installation
   instructions in the docker docs have since changed.
   * we can now use `docker compose` instead of `docker-compose`
+
+# TODOs
+
+Notes to self:
+
+* Remove libssl1.1.1 installation when Fulcrum1.8.1 is out
+* It seems like it can all be done in one step, we just should not enable
+  the tor settings in `bitcoin.conf` for the initial chain download, so
+  maybe step2 should only be for insertin those settings and everything
+  else should be in step1.
 # CLI Commands
 
 Just taking some notes here about useful CLI commands that k3tan shares in 
@@ -91,3 +105,7 @@ his videos:
   * see https://youtu.be/fx_mLXISrfM?t=1264
 * `journalctl -fu bitcoind|fulcrum`
   * see logs of the given service in realtime
+* `~/dojo-app/docker/my-dojo/dojo.sh logs`
+  * see all outputs from all containers that belong to dojo
+* `~/dojo-app/docker/my-dojo/dojo.sh onion`
+  * get the onion address of the dojo management interface
