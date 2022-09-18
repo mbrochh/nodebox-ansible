@@ -38,6 +38,13 @@
     mode: a+x
     timeout: 30
 
+# If we never started the service yet, the folder will not exist yet
+- name: Create .bitcoin folder
+  become_user: satoshi
+  ansible.builtin.file:
+    path: '~/.bitcoin'
+    state: directory
+
 # see https://youtu.be/fx_mLXISrfM?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=586
 - name: Create bitcoin.conf file
   become_user: satoshi
