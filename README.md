@@ -109,3 +109,10 @@ his videos:
   * see all outputs from all containers that belong to dojo
 * `~/dojo-app/docker/my-dojo/dojo.sh onion`
   * get the onion address of the dojo management interface
+
+# Troubleshooting
+
+## `txindex is catching up on block notifications`
+
+* If this appears in `tail -f ~/.bitcoin/debug.log` and it seems stuck, run
+  `sudo systemctl restart bitcoind`, now it should continue to sync the chain.
