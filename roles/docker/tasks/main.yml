@@ -18,6 +18,7 @@
 - name: Delete key from potential previous run
   become: true
   ansible.builtin.shell: 'rm /etc/apt/keyrings/docker.gpg'
+  ignore_errors: true
  
 - name: Download docker GPG key
   become: true
@@ -42,3 +43,11 @@
 - name: Add user to docker group
   become: true
   ansible.builtin.shell: 'usermod -aG docker {{ ansible_user }}'
+
+- name: Docker installation done
+  ansible.builtin.debug:
+    msg:
+      - "If you have an ssh session to your nodebox, close it now"
+      - "Then ssh back into the box and run `docker ps`"
+      - "You should see CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES"
+      - "You can also run `tail -f ~/.bitcoin/debug.log` to see if bitcoind is syncing the blockchain."
