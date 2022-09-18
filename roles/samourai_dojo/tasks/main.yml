@@ -1,0 +1,117 @@
+# see https://youtu.be/cKTThYKsiEo?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=59
+- name: Download dojo
+  become_user: satoshi
+  ansible.builtin.get_url:
+    url: '{{ dojo_download_url }}'
+    dest: '~/downloads/{{ dojo_folder_name }}.tar.gz'
+    timeout: 30    
+  
+# see https://youtu.be/cKTThYKsiEo?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=59
+- name: Unarchive dojo
+  become_user: satoshi
+  ansible.builtin.unarchive:
+    remote_src: yes
+    src: ~/downloads/{{ dojo_folder_name }}.tar.gz
+    dest: ~/downloads/
+
+# see https://youtu.be/cKTThYKsiEo?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=139
+- name: Create dojo-app folder
+  become_user: satoshi
+  ansible.builtin.file:
+    path: '~/dojo-app'
+    state: directory
+
+# see https://youtu.be/cKTThYKsiEo?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=152
+- name: Move dojo-app files
+  become_user: satoshi
+  ansible.builtin.shell: 'mv ~/downloads/{{ dojo_folder_name }}/* ~/dojo-app'
+
+# see https://youtu.be/cKTThYKsiEo?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=212
+- name: Update dojo docker-bitcoind.conf.tpl 
+  become_user: satoshi
+  ansible.builtin.lineinfile:
+    path: '~/dojo-app/docker/my-dojo/conf/docker-bitcoind.conf.tpl'
+    regexp: '{{ item.regexp }}'
+    line: '{{ item.line }}'
+  loop:
+    - { regexp: 'BITCOIND_RPC_USER=', line: 'BITCOIND_RPC_USER={{ bitcoin_core_username }}' }
+    - { regexp: 'BITCOIND_RPC_PASSWORD=', line: 'BITCOIND_RPC_PASSWORD={{ bitcoin_core_password }}' }
+    - { regexp: 'BITCOIND_INSTALL=', line: 'BITCOIND_INSTALL=off' }
+    - { regexp: 'BITCOIND_IP=', line: 'BITCOIND_IP={{ nodebox_ip }}' }
+    - { regexp: 'BITCOIND_RPC_PORT=', line: 'BITCOIND_RPC_PORT=8332' }
+    - { regexp: 'BITCOIND_ZMQ_RAWTXS=', line: 'BITCOIND_ZMQ_RAWTXS=28333' }
+    - { regexp: 'BITCOIND_ZMQ_BLK_HASH=', line: 'BITCOIND_ZMQ_BLK_HASH=28334' }
+
+# see https://youtu.be/cKTThYKsiEo?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=384
+- name: Update dojo docker-explorer.conf.tpl 
+  become_user: satoshi
+  ansible.builtin.lineinfile:
+    path: '~/dojo-app/docker/my-dojo/conf/docker-explorer.conf.tpl'
+    regexp: '{{ item.regexp }}'
+    line: '{{ item.line }}'
+  loop:
+    - { regexp: 'EXPLORER_INSTALL=', line: 'EXPLORER_INSTALL=off' }
+
+# see https://youtu.be/cKTThYKsiEo?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=407
+- name: Update dojo docker-indexer.conf.tpl 
+  become_user: satoshi
+  ansible.builtin.lineinfile:
+    path: '~/dojo-app/docker/my-dojo/conf/docker-indexer.conf.tpl'
+    regexp: '{{ item.regexp }}'
+    line: '{{ item.line }}'
+  loop:
+    - { regexp: 'INDEXER_TYPE=', line: 'INDEXER_TYPE=fulcrum' }
+    - { regexp: 'INDEXER_IP=', line: 'INDEXER_IP={{ nodebox_ip }}' }
+    - { regexp: 'INDEXER_RPC_PORT=', line: 'INDEXER_RPC_PORT=50002' }
+    - { regexp: 'INDEXER_BATCH_SUPPORT=', line: 'INDEXER_BATCH_SUPPORT=active' }
+    - { regexp: 'INDEXER_PROTOCOL=', line: 'INDEXER_PROTOCOL=tls' }
+
+# see https://youtu.be/cKTThYKsiEo?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=461
+- name: Update dojo docker-mysql.conf.tpl 
+  become_user: satoshi
+  ansible.builtin.lineinfile:
+    path: '~/dojo-app/docker/my-dojo/conf/docker-mysql.conf.tpl'
+    regexp: '{{ item.regexp }}'
+    line: '{{ item.line }}'
+  loop:
+    - { regexp: 'MYSQL_ROOT_PASSWORD=', line: 'MYSQL_ROOT_PASSWORD={{ dojo_mysql_root_password }}' }
+    - { regexp: 'MYSQL_PASSWORD=', line: 'MYSQL_PASSWORD={{ dojo_mysql_password }}' }
+
+# see https://youtu.be/cKTThYKsiEo?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=516
+- name: Update dojo docker-node.conf.tpl 
+  become_user: satoshi
+  ansible.builtin.lineinfile:
+    path: '~/dojo-app/docker/my-dojo/conf/docker-node.conf.tpl'
+    regexp: '{{ item.regexp }}'
+    line: '{{ item.line }}'
+  loop:
+    - { regexp: 'NODE_API_KEY=', line: 'NODE_API_KEY={{ dojo_api_key }}' }
+    - { regexp: 'NODE_ADMIN_KEY=', line: 'NODE_ADMIN_KEY={{ dojo_admin_key }}' }
+    - { regexp: 'NODE_JWT_SECRET=', line: 'NODE_JWT_SECRET={{ dojo_jwt_secret }}' }
+    - { regexp: 'NODE_ACTIVE_INDEXER=', line: 'NODE_ACTIVE_INDEXER=local_indexer' }
+
+# new command needed because docker-compose is now `docker compose`
+- name: Replace docker-compose in dojo.sh
+  become_user: satoshi
+  ansible.builtin.replace:
+    path: '~/dojo-app/docker/my-dojo/dojo.sh'
+    regexp: 'docker-compose '
+    replace: 'docker compose '
+
+# see https://youtu.be/cKTThYKsiEo?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=643
+- name: Install dojo (this will take a few minutes)
+  become_user: satoshi
+  ansible.builtin.expect:
+    timeout: null
+    chdir: '/home/{{ ansible_user }}/dojo-app/docker/my-dojo/'
+    command: './dojo.sh install --nolog'
+    responses:
+      (i?)continue: 'y'
+      (i?)computer: 'y'
+
+- name: Dojo install success
+  ansible.builtin.debug:
+    msg:
+      - "Dojo docker containers should be running now"
+      - "You can run `docker ps` and you should see four `samouraiwallet` containers"
+      - "You can run `~/dojo-app/docker/my-dojo/dojo.sh logs` to see if the block headers are being synced"

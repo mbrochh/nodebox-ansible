@@ -6,6 +6,11 @@ ansible_user: your nodebox user here (satoshi?)
 ansible_become_password: your nodebox password here
 bitcoin_core_username: your bitcoin core username 
 bitcoin_core_password: your bitcoin core password
+dojo_mysql_root_password: your dojo mysql root password here
+dojo_mysql_password: your dojo mysql password here
+dojo_api_key: your dojo api key here
+dojo_admin_key: your dojo admin key here
+dojo_jwt_secret: your dojo jwt secret here
 
 # ==============================================================================
 # Change these to the latest bitcoin version if needed
@@ -19,6 +24,10 @@ bitcoin_core_checksums_url: 'https://bitcoincore.org/bin/bitcoin-core-23.0/SHA25
 fulcrum_folder_name: 'fulcrum-1.8.0'
 fulcrum_download_url: 'https://github.com/cculianu/Fulcrum/releases/download/v1.8.0/Fulcrum-1.8.0-x86_64-linux.tar.gz'
 fulcrum_checksum_url: 'https://github.com/cculianu/Fulcrum/releases/download/v1.8.0/Fulcrum-1.8.0-x86_64-linux.tar.gz.sha256sum'
+
+# see https://youtu.be/cKTThYKsiEo?list=PLCRbH-IWlcW2A_kpx2XwAMgT0rcZEZ2Cg&t=59
+dojo_folder_name: 'samourai-dojo-v1.17.0'
+dojo_download_url: 'https://code.samourai.io/dojo/samourai-dojo/-/archive/v1.17.0/samourai-dojo-v1.17.0.tar.gz'
 
 # ==============================================================================
 # You probably don't need to change these
